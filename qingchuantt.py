@@ -158,7 +158,7 @@ def main():
     if kemu != '12090':
         ws2[f'E{totalRow + 1}'] = f'=SUM(E10:E{totalRow})'
         ws2[f'F{totalRow + 1}'] = f'=SUM(F10:F{totalRow})'
-        ws2[f'G{totalRow + 1}'] = f'=SUM(E10:E{totalRow})-SUM(F10:F{totalRow})'
+        ws2[f'G{totalRow + 1}'] = f'=SUM(F10:F{totalRow})-SUM(E10:E{totalRow})'
     else :
         ws2[f'F{totalRow + 1}'] = f'=SUM(F10:F{totalRow})'
         ws2[f'G{totalRow + 1}'] = f'=SUM(G10:G{totalRow})'
