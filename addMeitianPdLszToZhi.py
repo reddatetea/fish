@@ -34,18 +34,14 @@ import easygui
 def yuancailiaoLiushuizhang(files):
     datas = []
     for filename in files:
-        data = pd.read_excel(filename)
+        data = pd.read_excel(filename,dtype = {'单据号':str})
         data = data[['日期', '单据号', '供货单位', '存货名称', '计量单位',  '入库数量','入库单价', '入库金额']]
         # data = data.rename(columns={'存货名称': '品名', '计量单位': '单价'})
         data.dropna(subset=['供货单位'], inplace=True)  # 删除供货单位列中的有空值的行
         datas.append(data)
-
     ysl = pd.concat(datas)  # 多个原材料流水账账汇总
-
+    ysl['单据号'] = ysl['单据号'].astype(str)  # 多个原材料流水账账汇总
     ysl.rename({'存货名称':'品名','计量单位':'单位'},axis=1,inplace=True)   #042新账套引出的流水账，列名有变，需调整
-    # a = ysl.pop('入库数量')  # 移动列
-    # ysl.insert(5, '入库数量', a)
-    # print(ysl)
 
     for j in ['cwName', 'priceName', '期间', '送货日期', '白云期间', '令数', '吨数', '令价', '吨价', '吨价0', '记账']:
         ysl[j] = None
@@ -60,12 +56,11 @@ def yuancailiaoLiushuizhang(files):
     ysl = ysl.assign(吨价=ysl.apply(lambda x: lingDun(x)[3], axis=1))
     ysl['日期'] = ysl['日期'].astype('datetime64[ns]')
     ysl['送货日期'] = ysl['送货日期'].astype('datetime64[ns]')
-    ysl['单据号'] = ysl['单据号'].astype('int64')
+    # ysl['单据号'] = ysl['单据号'].astype('int64')
     ysl = ysl.assign(cwName=np.where((ysl.cwName == '线圈') & (ysl['单位'] == '卷'), '线圈（卷）', ysl.cwName))
     ysl = ysl.assign(priceName=np.where((ysl.priceName == '线圈') & (ysl['单位'] == '卷'), '线圈（卷）', ysl.priceName))
     ysl = ysl.assign(cwName=np.where((ysl.cwName == '线圈') & (ysl['单位'] == '公斤'), '线圈（公斤）', ysl.cwName))
     ysl = ysl.assign(priceName=np.where((ysl.priceName == '线圈') & (ysl['单位'] == '公斤'), '线圈（公斤）', ysl.priceName))
-
     return ysl
 
 def qijianJisuan(string):
@@ -108,7 +103,7 @@ def concatAndQuchong(fname,sheetname,newdata,in_subject,index_col=['日期','单
     app = xw.App(visible=False, add_book=False)
     wb = app.books.open(fname)
     ws = wb.sheets[sheetname]
-    olddata = pd.DataFrame(pd.read_excel(fname, sheetname))
+    olddata = pd.DataFrame(pd.read_excel(fname, sheetname,dtype = {'单据号':str}))
     data = pd.concat([olddata, newdata])
     col_names = data.columns.to_list()
     data.drop_duplicates(subset=in_subject, keep='first', inplace=True)
@@ -118,7 +113,7 @@ def concatAndQuchong(fname,sheetname,newdata,in_subject,index_col=['日期','单
     data = data[col_names]                               #按原来列顺序
     # first_col = data.columns[0]                   #取第一列
     # data = data.set_index(first_col)      #按首列索引
-    ws.clear()
+    ws.clear_contents()
     ws.range('A1').options(pd.DataFrame, index=False).value = data
     wb.save()
     wb.close()
@@ -176,7 +171,7 @@ def lszTobaiyun(start_riqi, end_riqi,piaojuhao):
     df = liushuizhang()  # 流水账df
     df1 = qushu(df, start_riqi, end_riqi, piaojuhao)
     fname_ruku = chuli(df1)
-    df = pd.read_excel(fname_ruku, '2020')
+    df = pd.read_excel(fname_ruku, '2020',dtype = {'单号':str})
     in_subject = ['开票日期', '入库单号', '品名', '数量(令)', '计算重量', '仓库材料']
     sort_cols = ['开票日期', '入库单号', '品名']
     # sort_cols = ['入库单号', '品名']
@@ -188,8 +183,8 @@ def lszTozhi(start_riqi, end_riqi,piaojuhao):
     jianchen = zhiNewGongyingshang.zhiGongyingshang()
     df1 = addzhiRukuPd.qushu(df, start_riqi, end_riqi, piaojuhao,jianchen)
     fname_ruku = addzhiRukuPd.chuli(df1)
-    df = pd.read_excel(fname_ruku, '入库')
-    in_subject = ['单位', '供应商', '时间', '单号', '材料', '入库', '入库（kg）']
+    df = pd.read_excel(fname_ruku, '入库',dtype = {'单号':str})
+    in_subject = ['单位0', '供应商', '时间', '单号', '材料', '入库', '入库（kg）']
     sort_cols = ['期间','供应商','时间', '单号','材料']
     addzhiRukuPd.delchongfu(fname_ruku, '入库', in_subject,sort_cols)
     addzhiRukuPd.jiagongsi(fname_ruku)
@@ -242,9 +237,9 @@ def tobaiyun(start_riqi, end_riqi, piaojuhao):
 def main():
     addmeitianLiushuizhang()
 
-    piaojuhao = 0
+    piaojuhao = ''
     msg = '请选择日期输入的方式：'
-    print(msg)
+
     choice = buttonbox(msg, choices=['自动', '手动','singleZhi','singleBaiyun'])
     if choice == '自动':
         today = date.today()
@@ -252,11 +247,11 @@ def main():
         try :
             tobaiyun(start_riqi, end_riqi, piaojuhao)
         except:
-            print('本月没有白云入库')
+            easygui.msgbox('本月没有白云入库')
         try :
             tozhi(start_riqi, end_riqi, piaojuhao)
         except:
-            print('本月没有纸入库')
+            easygui.msgbox('本月没有纸入库')
 
     elif choice == '手动':
         today = pd.Timestamp(easygui.enterbox('请输入要查询期间的后一天"2021-12-27"\n'))
@@ -264,22 +259,21 @@ def main():
         try :
             tobaiyun(start_riqi, end_riqi, piaojuhao)
         except:
-            print('本月没有白云入库')
+            easygui.msgbox('本月没有白云入库')
         try :
             tozhi(start_riqi, end_riqi, piaojuhao)
         except:
-            print('本月没有纸入库')
+            easygui.msgbox('本月没有纸入库')
     elif choice == 'singleZhi':
         try :
             addzhiRukuPd.main()
         except:
-            print('本月没有纸入库')
+            easygui.msgbox('本月没有纸入库')
     else :
         try:
             addbaiyunRukuPd.main()
         except:
-            print('本月没有白云入库')
-
+            easygui.msgbox('本月没有白云入库')
 
     easygui.msgbox('程序结束')
 

@@ -14,7 +14,7 @@ import easygui
 #实时吨价
 def dunjiaDic():
     fname2 = r'F:\a00nutstore\006\zw\baiyun\2020白云入库.xlsx'
-    df = pd.read_excel(fname2, sheet_name='2020')
+    df = pd.read_excel(fname2, sheet_name='2020',dtype = {'入库单号':str})
     df = df.loc[~df['记账'].isnull()]  # 删除记账为空的记录
     df1 = df[df['pricename'].str.contains('返利|价差|冲减|多计|折扣') == False]  # 品名中包含返利、价差、冲减等不计入字典
     df1 = df1.assign(gongsi='驻马店白云纸业有限公司')  # 增加一列‘'驻马店白云纸业有限公司'
@@ -23,7 +23,7 @@ def dunjiaDic():
     return dunjia_dic
 
 def liushuizhang():
-    df = pd.read_excel(r'F:\a00nutstore\006\zw\原材料实时流水账\原材料实时流水账.xlsx', '流水账')
+    df = pd.read_excel(r'F:\a00nutstore\006\zw\原材料实时流水账\原材料实时流水账.xlsx', sheet_name = '流水账',dtype = {'单据号':str})
     df = df.loc[df['供货单位'] == '驻马店白云纸业有限公司']
     df = df.loc[:,
          [ '日期','送货日期','期间', '白云期间', '单据号', 'cwName','令数', '吨数',  '吨价','入库金额','记账','品名', 'priceName']]
@@ -38,7 +38,7 @@ def liushuizhang():
 def query():
     start_riqi = pd.Timestamp(easygui.enterbox('请输入入库起始日期期间：格式为2021-11-4：'))
     end_riqi = pd.Timestamp(easygui.enterbox('请输入入库结束日期期间：格式为2021-11-4：'))
-    piaojuhao = int(easygui.enterbox('请输入票据号90031065：'))
+    piaojuhao = easygui.enterbox('请输入票据号90031065：')
     return start_riqi,end_riqi,piaojuhao
 
 def qushu(df,start_riqi,end_riqi,piaojuhao):
@@ -54,7 +54,7 @@ def getruku():
     beifen(fname_ruku)        #重要文件备份
     wb = openpyxl.load_workbook(fname_ruku,data_only=True)  #将有公式的全部转为值，避免以后excel中有公式出现空值
     wb.save(fname_ruku)
-    df2= pd.read_excel(fname_ruku,ws_name_ruku)
+    df2= pd.read_excel(fname_ruku,ws_name_ruku,dtype = {'入库单号':str})
     max_row = df2.shape[0]
     leibie_dic = dict(zip(df2['pricename'].tolist(), df2['类别'].tolist()))
     return fname_ruku,ws_name_ruku,max_row,leibie_dic
@@ -64,8 +64,8 @@ def chuli(df1):
     df1['吨数'] = round(df1['吨数'],3)
     df1['数量(吨)'] = df1['吨数']
     dunjia_dic = dunjiaDic()
-    print(dunjia_dic)
-    print(len(dunjia_dic))
+    # print(dunjia_dic)
+    # print(len(dunjia_dic))
     df1 = df1.assign(吨价=df1.apply(lambda x: dunjia_dic.get(('驻马店白云纸业有限公司', x['priceName']),0), axis=1))
     fname_ruku, ws_name_ruku, max_row,leibie_dic = getruku()
     df1 = df1.assign(类别=df1.apply(lambda x:leibie_dic.get(x.priceName,0),axis=1))
@@ -79,18 +79,20 @@ def chuli(df1):
     return fname_ruku
 
 def delchongfu(fname,sheetname,in_subject,sort_cols):
-    app = xw.App(visible = False,add_book = False)
-    wb = app.books.open(fname)
-    ws = wb.sheets['%s'%sheetname]
-    data = pd.DataFrame(pd.read_excel(fname, sheetname))
+    data = pd.DataFrame(pd.read_excel(fname, sheetname,dtype = {'入库单号':str}))
     data.drop_duplicates(subset=in_subject, keep='first', inplace=True)
     data = data.sort_values(by=sort_cols)
     # data = data.set_index(in_subject[0])
-    ws.clear()
-    ws.range('A1').options(pd.DataFrame,index=False).value = data
-    wb.save()
-    wb.close()
-    app.quit()
+    wb = openpyxl.load_workbook(fname)
+    ws = wb[sheetname]
+    max_row = ws.max_row
+    ws.delete_rows(2, max_row)
+    wb.save(fname)
+    wb = openpyxl.load_workbook(fname)
+    with pd.ExcelWriter(fname, engine='openpyxl')  as writer:
+        writer.book = wb
+        writer.sheets = dict((ws.title, ws) for ws in wb.worksheets)
+        data.to_excel(writer, sheetname, header=None, index=False, startrow=1)
     return fname
 
 def jiagongsi(fname):
@@ -111,7 +113,7 @@ def main():
     start_riqi, end_riqi, piaojuhao = query()
     df = liushuizhang()    #流水账df
     df1 = qushu(df,start_riqi,end_riqi,piaojuhao)
-    print(df1)
+    # print(df1)
     # fname_ruku = chuli(df1)
     # in_subject = ['开票日期', '入库单号','品名', '数量(令)', '计算重量','仓库材料']
     # sort_cols = ['开票日期', '入库单号','品名']

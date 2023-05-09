@@ -15,7 +15,7 @@ import easygui
 #实时吨价
 def dunjiaDic():
     fname2 = r'F:\a00nutstore\006\zw\else\2020入库.xlsx'
-    df = pd.read_excel(fname2, sheet_name='入库')
+    df = pd.read_excel(fname2, sheet_name='入库',dtype = {'单号':str})
     df1 = df[df['pricename'].str.contains('返利|价差|冲减|多计|折扣') == False]  # 品名中包含返利、价差、冲减等不计入字典
     gongyingshangs = list(df1['供应商'])
     pinmings = list(df1['pricename'])
@@ -34,7 +34,7 @@ def dunjiaDic():
         else:
             continue
 
-    print(dunjia_dic)
+    # print(dunjia_dic)
     return dunjia_dic
 
 #将材料名称卷筒后面的数字剔除
@@ -49,7 +49,7 @@ def tichuNum(temp):
     return string
 
 def liushuizhang():
-    df = pd.read_excel(r'F:\a00nutstore\006\zw\原材料实时流水账\原材料实时流水账.xlsx', '流水账')
+    df = pd.read_excel(r'F:\a00nutstore\006\zw\原材料实时流水账\原材料实时流水账.xlsx', sheet_name = '流水账',dtype = {'单据号':str})
     df = df.loc[:,
          ['供货单位', '期间', '日期', '单据号', '品名', '令数', 'cwName', '单位', '吨数', '吨价0', '吨价', '令价', '入库金额', 'priceName','送货日期','白云期间']]
     df.insert(0, '单位0', '双佳')
@@ -65,7 +65,7 @@ def liushuizhang():
 def query():
     start_riqi = pd.Timestamp(easygui.enterbox('请输入入库起始日期期间：格式为2021-11-4：'))
     end_riqi = pd.Timestamp(easygui.enterbox('请输入入库结束日期期间：格式为2021-11-4：'))
-    piaojuhao = int(easygui.enterbox('请输入票据号90031065：'))
+    piaojuhao = easygui.enterbox('请输入票据号90031065：')
     return start_riqi,end_riqi,piaojuhao
 
 def qushu(df,start_riqi,end_riqi,piaojuhao,jianchen):
@@ -83,7 +83,7 @@ def getruku():
     beifen(fname_ruku)         #重要文件备份
     wb = openpyxl.load_workbook(fname_ruku, data_only=True)  # 将有公式的全部转为值，避免以后excel中有公式出现空值
     wb.save(fname_ruku)
-    df2= pd.read_excel(fname_ruku,ws_name_ruku)
+    df2= pd.read_excel(fname_ruku,ws_name_ruku,dtype = {'单号':str})
     max_row = df2.shape[0]
     return fname_ruku,ws_name_ruku,max_row
 
@@ -105,23 +105,28 @@ def chuli(df1):
     with pd.ExcelWriter(fname_ruku, engine='openpyxl')  as writer:
         writer.book = wb
         writer.sheets = dict((ws.title, ws) for ws in wb.worksheets)
-        df1.to_excel(writer, ws_name_ruku, header=None, index=False, startrow=max_row + 1)
+        df1.to_excel(writer, ws_name_ruku, header=None, index=False, startrow=max_row + 1)   #
+
     # writer.save()
     return fname_ruku
 
 def delchongfu(fname,sheetname,in_subject,sort_cols):
-    app = xw.App(visible = False,add_book = False)
-    wb = app.books.open(fname)
-    ws = wb.sheets['%s'%sheetname]
-    data = pd.DataFrame(pd.read_excel(fname, sheetname))
+    data = pd.DataFrame(pd.read_excel(fname, sheetname, dtype={'单号': str}))
     data.drop_duplicates(subset=in_subject, keep='first', inplace=True)
     data = data.set_index(in_subject[0])
     data = data.sort_values(by=sort_cols)
-    ws.clear()
-    ws.range('A1').value = data
-    wb.save()
-    wb.close()
-    app.quit()
+    wb = openpyxl.load_workbook(fname)
+    ws = wb[sheetname]
+    max_row = ws.max_row
+    ws.delete_rows(2, max_row)
+    wb.save(fname)
+    wb = openpyxl.load_workbook(fname)
+    with pd.ExcelWriter(fname, engine='openpyxl')  as writer:
+        writer.book = wb
+        writer.sheets = dict((ws.title, ws) for ws in wb.worksheets)
+        data.to_excel(writer, sheetname, header=None, index=False, startrow=1)
+
+
     return fname
 
 def jiagongsi(fname):
@@ -147,12 +152,12 @@ def main():
     jianchen = zhiNewGongyingshang.zhiGongyingshang()
     df1 = qushu(df,start_riqi,end_riqi,piaojuhao,jianchen)
     fname_ruku = chuli(df1)
-    df = pd.read_excel(fname_ruku,'入库')
-    in_subject = ['单位', '供应商', '时间', '单号', '材料', '入库', '入库（kg）']
-    sort_cols = ['期间','供应商','时间', '单号','材料']
-    delchongfu(fname_ruku,'入库', in_subject,sort_cols)
-    jiagongsi(fname_ruku)
-    os.startfile(fname_ruku)
+    # df = pd.read_excel(fname_ruku,'入库',dtype = {'单号':str})
+    # in_subject = ['单位', '供应商', '时间', '单号', '材料', '入库', '入库（kg）']
+    # sort_cols = ['期间','供应商','时间', '单号','材料']
+    # delchongfu(fname_ruku,'入库', in_subject,sort_cols)
+    # jiagongsi(fname_ruku)
+    # os.startfile(fname_ruku)
 
 if __name__ == '__main__':
     main()
