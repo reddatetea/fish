@@ -101,23 +101,17 @@ def chuli(df1):
     df1 = df1.assign(吨价0=df1.apply(lambda x: dunjia_dic.get((x['供货单位'], x['priceName']),0), axis=1))
     df1['令价'] = round(df1['令价'],2)
     fname_ruku, ws_name_ruku, max_row = getruku()
-    print(df1)
-    print(max_row)
-    df1.to_excel('1111.xlsx')
-    # df0 = pd.read_excel(fname_ruku,sheet_name = ws_name_ruku,dtype = {'单号':str})
-    # df8 = pd.concat([df0,df1])
-    # print(df8)
-    # df8.to_excel('1111.xlsx')
-    wb = openpyxl.load_workbook(fname_ruku)
+    # wb = openpyxl.load_workbook(fname_ruku)
+    # with pd.ExcelWriter(fname_ruku,engine='openpyxl') as writer:    #date_format='yyyy-mm-dd',
+    #     writer.book = wb
+    #     writer.sheets.update(dict((ws.title, ws) for ws in wb.worksheets))  #保存其他用不到的 sheet 页面,update(dict谷，来源于谷歌
+    #     #worksheet = writer.sheets['Sheet1']     #可借签
+    #     #worksheet.write(0, 11, 'YO')            #可借签
+    #     df1.to_excel(fname_ruku, ws_name_ruku, header=None, index=False, startrow=max_row + 1)  #
+    with pd.ExcelWriter(fname_ruku, engine='openpyxl', mode='a', if_sheet_exists='overlay') as writer:
+        df1.to_excel(writer, ws_name_ruku, header=None, index=False, startrow=max_row)
 
-    with pd.ExcelWriter(fname_ruku,engine='openpyxl') as writer:    #date_format='yyyy-mm-dd',
-        writer.book = wb
-        writer.sheets.update(dict((ws.title, ws) for ws in wb.worksheets))  #保存其他用不到的 sheet 页面,update(dict谷，来源于谷歌
-        #worksheet = writer.sheets['Sheet1']     #可借签
-        #worksheet.write(0, 11, 'YO')            #可借签
-        df1.to_excel(fname_ruku, ws_name_ruku, header=None, index=False, startrow=max_row + 1)  #
-
-    wb.save(fname_ruku)
+    # wb.save(fname_ruku)
     return fname_ruku
 
 def delchongfu(fname,sheetname,in_subject,sort_cols):
