@@ -84,7 +84,7 @@ def getruku():
     wb = openpyxl.load_workbook(fname_ruku, data_only=True)  # 将有公式的全部转为值，避免以后excel中有公式出现空值
     wb.save(fname_ruku)
     df2= pd.read_excel(fname_ruku,ws_name_ruku,dtype = {'单号':str})
-    max_row = df2.shape[0]
+    max_row = df2.shape[0] + 1
     return fname_ruku,ws_name_ruku,max_row
 
 def chuli(df1):
@@ -108,7 +108,7 @@ def chuli(df1):
     #     #worksheet = writer.sheets['Sheet1']     #可借签
     #     #worksheet.write(0, 11, 'YO')            #可借签
     #     df1.to_excel(fname_ruku, ws_name_ruku, header=None, index=False, startrow=max_row + 1)  #
-    with pd.ExcelWriter(fname_ruku, engine='openpyxl', mode='a', if_sheet_exists='overlay') as writer:
+    with pd.ExcelWriter(fname_ruku, engine='openpyxl',date_format='yyyy-mm-dd', mode='a', if_sheet_exists='overlay') as writer:
         df1.to_excel(writer, ws_name_ruku, header=None, index=False, startrow=max_row)
 
     # wb.save(fname_ruku)
@@ -117,16 +117,34 @@ def chuli(df1):
 def delchongfu(fname,sheetname,in_subject,sort_cols):
     data = pd.DataFrame(pd.read_excel(fname, sheetname, dtype={'单号': str}))
     data.drop_duplicates(subset=in_subject, keep='first', inplace=True)
-    data = data.set_index(in_subject[0])
+    # data = data.set_index(in_subject[0])
     data = data.sort_values(by=sort_cols)
     wb = openpyxl.load_workbook(fname)
     ws = wb[sheetname]
     max_row = ws.max_row
     ws.delete_rows(2, max_row)
     wb.save(fname)
+<<<<<<< HEAD
     with pd.ExcelWriter(fname, engine='openpyxl', mode='a', if_sheet_exists='overlay') as writer:
         data.to_excel(writer, sheetname, header=None, index=False, startrow=max_row)
     data.to_excel(fname, sheetname, header=None, index=False, startrow=1)
+=======
+    # wb = openpyxl.load_workbook(fname)
+    # with pd.ExcelWriter(fname, engine='openpyxl')  as writer:
+    #     writer.book = wb
+    #     writer.sheets = dict((ws.title, ws) for ws in wb.worksheets)
+    with pd.ExcelWriter(fname, engine='openpyxl',date_format='yyyy-mm-dd', mode='a', if_sheet_exists='overlay') as writer:
+        data.to_excel(writer, sheetname, header=None, index=False, startrow = 1)
+    wb = openpyxl.load_workbook(fname)
+    ws = wb[sheetname]
+    max_row = ws.max_row
+    for i in range(2, max_row + 1):
+        ws[f'D{i}'].number_format = 'yyyy-m-d'
+        ws[f'V{i}'].number_format = 'yyyy-m-d'
+        ws[f'Y{i}'].number_format = 'yyyy-m-d'
+    wb.save(fname)
+
+>>>>>>> 99d28458f50a695701f38d27baf081fa9e1058b7
     return fname
 
 def jiagongsi(fname):
@@ -153,7 +171,11 @@ def main():
     df1 = qushu(df,start_riqi,end_riqi,piaojuhao,jianchen)
     fname_ruku = chuli(df1)
     df = pd.read_excel(fname_ruku,'入库',dtype = {'单号':str})
+<<<<<<< HEAD
     in_subject = ['单位', '供应商', '时间', '单号', '材料', '入库', '入库（kg）']
+=======
+    in_subject = ['单位0', '供应商', '时间', '单号', '材料', '入库', '单位','入库（kg）']
+>>>>>>> 99d28458f50a695701f38d27baf081fa9e1058b7
     sort_cols = ['期间','供应商','时间', '单号','材料']
     delchongfu(fname_ruku,'入库', in_subject,sort_cols)
     jiagongsi(fname_ruku)

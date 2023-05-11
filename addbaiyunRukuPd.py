@@ -55,7 +55,7 @@ def getruku():
     wb = openpyxl.load_workbook(fname_ruku,data_only=True)  #将有公式的全部转为值，避免以后excel中有公式出现空值
     wb.save(fname_ruku)
     df2= pd.read_excel(fname_ruku,ws_name_ruku,dtype = {'入库单号':str})
-    max_row = df2.shape[0]
+    max_row = df2.shape[0] + 1
     leibie_dic = dict(zip(df2['pricename'].tolist(), df2['类别'].tolist()))
     return fname_ruku,ws_name_ruku,max_row,leibie_dic
 
@@ -69,11 +69,13 @@ def chuli(df1):
     df1 = df1.assign(吨价=df1.apply(lambda x: dunjia_dic.get(('驻马店白云纸业有限公司', x['priceName']),0), axis=1))
     fname_ruku, ws_name_ruku, max_row,leibie_dic = getruku()
     df1 = df1.assign(类别=df1.apply(lambda x:leibie_dic.get(x.priceName,0),axis=1))
-    wb = openpyxl.load_workbook(fname_ruku)
-    with pd.ExcelWriter(fname_ruku, engine='openpyxl')  as writer:
-        writer.book = wb
-        writer.sheets = dict((ws.title, ws) for ws in wb.worksheets)
-        df1.to_excel(writer, ws_name_ruku, header=None, index=False, startrow=max_row + 1)
+    # wb = openpyxl.load_workbook(fname_ruku)
+    # with pd.ExcelWriter(fname_ruku, engine='openpyxl')  as writer:
+    #     writer.book = wb
+    #     writer.sheets = dict((ws.title, ws) for ws in wb.worksheets)
+    #     df1.to_excel(writer, ws_name_ruku, header=None, index=False, startrow=max_row + 1)
+    with pd.ExcelWriter(fname_ruku, engine='openpyxl',date_format='yyyy-mm-dd', mode='a', if_sheet_exists='overlay') as writer:
+        df1.to_excel(writer, ws_name_ruku, header=None, index=False, startrow=max_row  )
     #writer.save()
 
     return fname_ruku
@@ -88,11 +90,21 @@ def delchongfu(fname,sheetname,in_subject,sort_cols):
     max_row = ws.max_row
     ws.delete_rows(2, max_row)
     wb.save(fname)
+    # wb = openpyxl.load_workbook(fname)
+    # with pd.ExcelWriter(fname, engine='openpyxl')  as writer:
+    #     writer.book = wb
+    #     writer.sheets = dict((ws.title, ws) for ws in wb.worksheets)
+    #     data.to_excel(writer, sheetname, header=None, index=False, startrow=1)
+    with pd.ExcelWriter(fname, engine='openpyxl',date_format='yyyy-mm-dd', mode='a', if_sheet_exists='overlay') as writer:
+        data.to_excel(writer, sheetname, header=None, index=False, startrow = 1) #excel中实际行+1才是
     wb = openpyxl.load_workbook(fname)
-    with pd.ExcelWriter(fname, engine='openpyxl')  as writer:
-        writer.book = wb
-        writer.sheets = dict((ws.title, ws) for ws in wb.worksheets)
-        data.to_excel(writer, sheetname, header=None, index=False, startrow=1)
+    ws = wb[sheetname]
+    max_row = ws.max_row
+    for i in range(2, max_row + 1):
+        ws[f'A{i}'].number_format = 'yyyy-m-d'
+        ws[f'C{i}'].number_format = 'yyyy-m-d'
+        ws[f'N{i}'].number_format = 'yyyy-m-d'
+    wb.save(fname)
     return fname
 
 def jiagongsi(fname):
@@ -113,13 +125,12 @@ def main():
     start_riqi, end_riqi, piaojuhao = query()
     df = liushuizhang()    #流水账df
     df1 = qushu(df,start_riqi,end_riqi,piaojuhao)
-    # print(df1)
-    # fname_ruku = chuli(df1)
-    # in_subject = ['开票日期', '入库单号','品名', '数量(令)', '计算重量','仓库材料']
-    # sort_cols = ['开票日期', '入库单号','品名']
-    # delchongfu(fname_ruku,'2020', in_subject,sort_cols)
-    # jiagongsi(fname_ruku)
-    # os.startfile(fname_ruku)
+    fname_ruku = chuli(df1)
+    in_subject = ['开票日期', '入库单号','品名', '数量(令)', '计算重量','仓库材料']
+    sort_cols = ['开票日期', '入库单号','品名']
+    delchongfu(fname_ruku,'2020', in_subject,sort_cols)
+    jiagongsi(fname_ruku)
+    os.startfile(fname_ruku)
 
 if __name__ == '__main__':
     main()
