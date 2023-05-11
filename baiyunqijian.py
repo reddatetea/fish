@@ -14,7 +14,7 @@ def baiyunQijian(riqi):
     year = int(mat.group('year'))
     month = int(mat.group('month'))
     day = int(mat.group('day'))
-    print(year,month,day)
+    # print(year,month,day)
     #计算白云期间
     songhuoday = '%02d' % day
     songhuomonth = '%02d' % month

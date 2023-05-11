@@ -9,6 +9,7 @@
 # _*_ coding:utf-8 _*_
 import os
 import numpy as np
+import xlsxlsx
 import pandas as pd
 from singleCailiaoRename import singlecailiaoName
 from qijianchuli import qijian
@@ -31,10 +32,18 @@ from easygui import buttonbox
 import zhiNewGongyingshang
 import easygui
 
+def xlsToXlsx(fname):
+    if os.path.splitext(fname)[-1].lower()=='.xls':
+        newname = xlsxlsx.xlsXlsx(fname)
+    else:
+        newname = fname
+    return newname
+
 def yuancailiaoLiushuizhang(files):
     datas = []
     for filename in files:
-        data = pd.read_excel(filename,dtype = {'单据号':str})
+        xlsxname = xlsToXlsx(filename)
+        data = pd.read_excel(xlsxname,dtype = {'单据号':str})
         data = data[['日期', '单据号', '供货单位', '存货名称', '计量单位',  '入库数量','入库单价', '入库金额']]
         # data = data.rename(columns={'存货名称': '品名', '计量单位': '单价'})
         data.dropna(subset=['供货单位'], inplace=True)  # 删除供货单位列中的有空值的行
@@ -80,6 +89,7 @@ def qijianJisuan(string):
 def lingpeijianLiushuizhang(files):
     datas = []
     for filename in files:
+        filename = xlsToXlsx(filename)
         data = pd.read_excel(filename)
 
         if data.columns[0]=='退货单号':
@@ -193,9 +203,10 @@ def addmeitianLiushuizhang():
     desktopPath = r'D:\ribaobiao'
     os.chdir(desktopPath)
     filenames = os.listdir(desktopPath)
-    lsz_files = [i for i in filenames if fnmatch(i, '*流水*.xls*')]
-    lpj_files = [i for i in filenames if fnmatch(i, '*统计*.xls*')]
+    lsz_files = [os.path.join(desktopPath,i) for i in filenames if fnmatch(i, '*流水*.xls*')]
+    lpj_files = [os.path.join(desktopPath,i) for i in filenames if fnmatch(i, '*统计*.xls*')]
     # 原材料
+    print(lsz_files)
     try:
         if len(lsz_files) >= 1:
             ysl_subject = ['日期', '单据号', '供货单位', '品名', '单位', '入库数量', '入库单价', '入库金额', 'cwName', 'priceName', '期间', '送货日期',
@@ -237,6 +248,7 @@ def tobaiyun(start_riqi, end_riqi, piaojuhao):
 def main():
     addmeitianLiushuizhang()
 
+
     piaojuhao = ''
     msg = '请选择日期输入的方式：'
 
@@ -276,6 +288,7 @@ def main():
             easygui.msgbox('本月没有白云入库')
 
     easygui.msgbox('程序结束')
+
 
 
 
