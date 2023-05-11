@@ -12,8 +12,8 @@ py_lst = ['bs4', 'docx','easygui', 'matplotlib', 'numpy', 'openpyxl', 'pandas', 
 
 choice1 = easygui.buttonbox(msg='请选择打包的环境',choices=['python38','python34','python311'])
 if choice1 == 'python38':
-        dabao_python = r'D:\python38\python.exe'
-        dabao_pyinstall = r'D:\python38\Scripts\PyInstaller-3.6\pyinstaller.py'
+        dabao_python = r'D:\python38\Scripts\pyinstaller.exe'
+        dabao_pyinstall = r''
 elif choice1 == 'python311':
     dabao_python = r'D:\python311\Scripts\pyinstaller.exe'
     dabao_pyinstall = r''

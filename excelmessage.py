@@ -16,7 +16,7 @@ def wenjian(msg='请点选要处理的excel文件'):
     return fname
 
 def excelMessage(fname):
-    if os.path.splitext(fname)[-1]=='.xls':
+    if os.path.splitext(fname)[-1].lower()=='.xls':
         xlsXlsx(fname)
         fname = fname + 'x'
 
