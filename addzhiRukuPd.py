@@ -124,14 +124,9 @@ def delchongfu(fname,sheetname,in_subject,sort_cols):
     max_row = ws.max_row
     ws.delete_rows(2, max_row)
     wb.save(fname)
-    # wb = openpyxl.load_workbook(fname)
-    # with pd.ExcelWriter(fname, engine='openpyxl')  as writer:
-    #     writer.book = wb
-    #     writer.sheets = dict((ws.title, ws) for ws in wb.worksheets)
+    with pd.ExcelWriter(fname, engine='openpyxl', mode='a', if_sheet_exists='overlay') as writer:
+        data.to_excel(writer, sheetname, header=None, index=False, startrow=max_row)
     data.to_excel(fname, sheetname, header=None, index=False, startrow=1)
-
-
-
     return fname
 
 def jiagongsi(fname):
@@ -156,14 +151,13 @@ def main():
     df = liushuizhang()    #流水账df
     jianchen = zhiNewGongyingshang.zhiGongyingshang()
     df1 = qushu(df,start_riqi,end_riqi,piaojuhao,jianchen)
-
     fname_ruku = chuli(df1)
-    # df = pd.read_excel(fname_ruku,'入库',dtype = {'单号':str})
-    # in_subject = ['单位', '供应商', '时间', '单号', '材料', '入库', '入库（kg）']
-    # sort_cols = ['期间','供应商','时间', '单号','材料']
-    # delchongfu(fname_ruku,'入库', in_subject,sort_cols)
-    # jiagongsi(fname_ruku)
-    # os.startfile(fname_ruku)
+    df = pd.read_excel(fname_ruku,'入库',dtype = {'单号':str})
+    in_subject = ['单位', '供应商', '时间', '单号', '材料', '入库', '入库（kg）']
+    sort_cols = ['期间','供应商','时间', '单号','材料']
+    delchongfu(fname_ruku,'入库', in_subject,sort_cols)
+    jiagongsi(fname_ruku)
+    os.startfile(fname_ruku)
 
 if __name__ == '__main__':
     main()
