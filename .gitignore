@@ -1,2 +1,11 @@
 F:/fish/.idea/*.*
 F:/fish/__pycache__/*.*
+__pycache__
+.virtual_documents
+qingchuan-hourWorking
+*.gif
+*.png
+*.jpg
+~$*.xls
+~$*.xlsx
+.ipynb_checkpoints
