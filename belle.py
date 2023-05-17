@@ -15,7 +15,7 @@ def res_path(relative_path):
 
 path = r'D:\python38\PyInstaller-3.6\PyInstaller\belly'
 os.chdir(path)
-fname = res_path(r'file\材料入库单.xlsx')
+fname = res_path(r'F:\a00nutstore\fishc\材料入库单.xlsx')
 print(fname)
 wb = openpyxl.load_workbook(fname)
 ws = wb.active
