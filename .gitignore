@@ -9,8 +9,8 @@
 ~$*.xls
 ~$*.xlsx
 ~.ipynb_checkpoints
-~材料入库单.xlsx
-~纸暂估调整.xlsx
+\材料入库单.xlsx
+\纸暂估调整.xlsx
 ~.ipynb_checkpoints
 ~.vscode
 ~venv
