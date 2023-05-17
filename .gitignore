@@ -9,8 +9,13 @@ qingchuan-hourWorking
 $*.xls
 $*.xlsx
 .ipynb_checkpoints
+<<<<<<< HEAD
 ææ–™å…¥åº“å•.xlsx
 çº¸æš‚ä¼°è°ƒæ•´.xlsx
+=======
+²ÄÁÏÈë¿âµ¥.xlsx
+Ö½ÔÝ¹Àµ÷Õû.xlsx
+>>>>>>> cfish
 .ipynb_checkpoints
 .vscode
 venv
