@@ -1,5 +1,9 @@
 .idea/**
+<<<<<<< HEAD
 __pycache__/*.*
+=======
+__pycache__/**
+>>>>>>> 0bc3e7a7f8903c9c92c5aa82342d7c4e5cd61eaf
 __pycache__
 .virtual_documents
 qingchuan-hourWorking
@@ -9,9 +13,23 @@ qingchuan-hourWorking
 $*.xls
 $*.xlsx
 .ipynb_checkpoints
+<<<<<<< HEAD
 ²ÄÁÏÈë¿âµ¥.xlsx
 Ö½ÔÝ¹Àµ÷Õû.xlsx
+=======
+<<<<<<< HEAD
+ææ–™å…¥åº“å•.xlsx
+çº¸æš‚ä¼°è°ƒæ•´.xlsx
+=======
+²ÄÁÏÈë¿âµ¥.xlsx
+Ö½ÔÝ¹Àµ÷Õû.xlsx
+>>>>>>> cfish
+>>>>>>> 0bc3e7a7f8903c9c92c5aa82342d7c4e5cd61eaf
 .ipynb_checkpoints
 .vscode
 venv
 venv32
+<<<<<<< HEAD
+=======
+*.tmp
+>>>>>>> 0bc3e7a7f8903c9c92c5aa82342d7c4e5cd61eaf
