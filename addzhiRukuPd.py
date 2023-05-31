@@ -11,6 +11,7 @@ import zhiNewGongyingshang
 import xlwings as xw
 from beifenFile import beifen
 import easygui
+from dunjiaToLingjia import DunjiaToLingjia
 
 #实时吨价
 def dunjiaDic():
@@ -60,6 +61,7 @@ def liushuizhang():
         df.insert(17, j, 0)
     for j in ['记账', '备注'][::-1]:
         df.insert(21, j,None)
+    df['令价0'] = df['令价']
     return df
 
 def query():
@@ -119,16 +121,12 @@ def delchongfu(fname,sheetname,in_subject,sort_cols):
     data.drop_duplicates(subset=in_subject, keep='first', inplace=True)
     # data = data.set_index(in_subject[0])
     data = data.sort_values(by=sort_cols)
+    data = data.assign(令价=data.apply(lambda x: DunjiaToLingjia(x['材料'], dunjia=x['吨价']), axis=1))
     wb = openpyxl.load_workbook(fname)
     ws = wb[sheetname]
     max_row = ws.max_row
     ws.delete_rows(2, max_row)
     wb.save(fname)
-<<<<<<< HEAD
-    with pd.ExcelWriter(fname, engine='openpyxl', mode='a', if_sheet_exists='overlay') as writer:
-        data.to_excel(writer, sheetname, header=None, index=False, startrow=max_row)
-    data.to_excel(fname, sheetname, header=None, index=False, startrow=1)
-=======
     # wb = openpyxl.load_workbook(fname)
     # with pd.ExcelWriter(fname, engine='openpyxl')  as writer:
     #     writer.book = wb
@@ -144,7 +142,6 @@ def delchongfu(fname,sheetname,in_subject,sort_cols):
         ws[f'Y{i}'].number_format = 'yyyy-m-d'
     wb.save(fname)
 
->>>>>>> 99d28458f50a695701f38d27baf081fa9e1058b7
     return fname
 
 def jiagongsi(fname):
@@ -171,11 +168,7 @@ def main():
     df1 = qushu(df,start_riqi,end_riqi,piaojuhao,jianchen)
     fname_ruku = chuli(df1)
     df = pd.read_excel(fname_ruku,'入库',dtype = {'单号':str})
-<<<<<<< HEAD
-    in_subject = ['单位', '供应商', '时间', '单号', '材料', '入库', '入库（kg）']
-=======
     in_subject = ['单位0', '供应商', '时间', '单号', '材料', '入库', '单位','入库（kg）']
->>>>>>> 99d28458f50a695701f38d27baf081fa9e1058b7
     sort_cols = ['期间','供应商','时间', '单号','材料']
     delchongfu(fname_ruku,'入库', in_subject,sort_cols)
     jiagongsi(fname_ruku)

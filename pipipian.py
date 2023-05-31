@@ -5,7 +5,7 @@ PP片核对
 import pandas as pd
 import os
 import datetime
-import  pipipianJisuan
+import  pipipianJiSuan
 import NewGongyinshang
 import easygui
 
@@ -19,7 +19,7 @@ def Dangyue(start_riqi,end_riqi):
     jianchen = NewGongyinshang.Gongyingshang(fname_gy)
     # jianchen = {'莆田市阳光塑胶':'阳光'}
     fname2 = r'F:\a00nutstore\006\zw\原材料实时流水账\原材料实时流水账.xlsx'
-    df = pd.read_excel(fname2, sheet_name='流水账',usecols=[0,1,2,3,5,6,7,9,10,11],index_col=0)    #usecols直接取所取的行
+    df = pd.read_excel(fname2, sheet_name='流水账',usecols=[0,1,2,3,5,6,7,9,10,11],index_col=0,dtype = {'单据号':str})    #usecols直接取所取的行
     df.sort_index(inplace=True)  # 对索引排序
     df = df.truncate(before=start_riqi, after=end_riqi)
     # df = df.loc[df['期间']==qijian ]
@@ -27,8 +27,8 @@ def Dangyue(start_riqi,end_riqi):
     for j in ['hou','单张面积','合同单价', '合同金额', '多计', '多计金额','面积']:
         df[j] = 0.0                             #0.0是flaost64,0是ind64
     df [ '备注'] = None
-    df = df.assign(hou=df['品名'].map(lambda x: pipipianJisuan.chicun(x)[0]))
-    df = df.assign(单张面积=df['品名'].map(lambda x: pipipianJisuan.chicun(x)[1]))
+    df = df.assign(hou=df['品名'].map(lambda x: pipipianJiSuan.chicun(x)[0]))
+    df = df.assign(单张面积=df['品名'].map(lambda x: pipipianJiSuan.chicun(x)[1]))
     df = df.reset_index()
     return fname,jianchen,df
 
