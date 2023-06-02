@@ -121,7 +121,7 @@ def  sandaisaijiangpaishu(choice):
     wb.save(fname)
 
 def main():
-    path = r'F:\a00nutstore\fishc\乒乓球比赛成绩'
+    path = r'F:\a00nutstore\娱乐\乒乓球比赛成绩'
     os.chdir(path)
     msg = '请选择要查询项目的性别：'
     print(msg)

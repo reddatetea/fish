@@ -131,7 +131,7 @@ def delchongfu(fname,sheetname,in_subject,sort_cols):
     # with pd.ExcelWriter(fname, engine='openpyxl')  as writer:
     #     writer.book = wb
     #     writer.sheets = dict((ws.title, ws) for ws in wb.worksheets)
-    with pd.ExcelWriter(fname, engine='openpyxl',date_format='yyyy-mm-dd', mode='a', if_sheet_exists='overlay') as writer:
+    with pd.ExcelWriter(fname, engine='openpyxl',date_format='yyyy-m-d', mode='a', if_sheet_exists='overlay') as writer:
         data.to_excel(writer, sheetname, header=None, index=False, startrow = 1)
     wb = openpyxl.load_workbook(fname)
     ws = wb[sheetname]

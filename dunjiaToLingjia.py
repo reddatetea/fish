@@ -33,11 +33,11 @@ def DunjiaToLingjia(str,dunjia=0):
     return lingjia
 
 def main():
-    fname = r'F:\repos\fish\2020入库.xlsx'
-    df = pd.read_excel(fname, sheet_name='入库')
-    df1 = df.assign(令价=df.apply(lambda x: DunjiaToLingjia(x['材料'], dunjia=x['吨价']), axis=1))
+    lingjia = DunjiaToLingjia('46g无碳复写上白787*1092',dunjia = 9865)
+    print(lingjia)
+    # fname = r'F:\repos\fish\2020入库.xlsx'
+    # df = pd.read_excel(fname, sheet_name='入库')
+    # df1 = df.assign(令价=df.apply(lambda x: DunjiaToLingjia(x['材料'], dunjia=x['吨价']), axis=1))
 
-
-
-if __name__ == "__man__":
-    DunjiaToLingjia(str, dunjia=0)
+if __name__ == '__main__':
+    main()
