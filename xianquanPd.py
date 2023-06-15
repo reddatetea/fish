@@ -61,7 +61,7 @@ def huizhong(jianchen,fname,df8):
     df8['多计金额'] = round(df8['入库金额'] - df8['合同金额'],2)
     df8  = df8.iloc[:,:18]
     grouped = df8.groupby('供货单位')
-    with pd.ExcelWriter(fname,engine='openpyxl',date_format='yyyy-mm-dd')  as writer:
+    with pd.ExcelWriter(fname,datetime_format='yyyy-m-d')  as writer:
         df8 = df8.append(df8.sum(numeric_only=True), ignore_index=True)
         df8.to_excel(writer, '当月正', index=False)
         for gys, values in grouped:

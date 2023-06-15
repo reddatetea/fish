@@ -69,7 +69,7 @@ def huizhong(jianchen,fname,df8):
     beizhu_where = df8.columns.tolist().index('备注')+1
     df9 = df8.iloc[:, :beizhu_where]
     grouped = df9.groupby('供货单位')
-    with pd.ExcelWriter(fname)  as writer:
+    with pd.ExcelWriter(fname,datetime_format='yyyy-m-d')  as writer:
         df8 = df8.append(df8.sum(numeric_only=True), ignore_index=True)
         df8.to_excel(writer, '当月正', index=False)
         for gys, values in grouped:
