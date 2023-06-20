@@ -90,8 +90,8 @@ def qijianJisuan(string):
 def lingpeijianLiushuizhang(files):
     datas = []
     for filename in files:
-        filename = xlsToXlsx(filename)
-        data = pd.read_excel(filename)
+        xlsxname = xlsToXlsx(filename)
+        data = pd.read_excel(xlsxname)
 
         if data.columns[0]=='退货单号':
             data.rename(columns={'退货单号':'入库单号','退货日期': '入库日期','退货数量':'入库数量'},inplace=True)
@@ -111,10 +111,7 @@ def lingpeijianLiushuizhang(files):
     return lpj
 
 def concatAndQuchong(fname,sheetname,newdata,in_subject,index_col=['日期','单据号', '供货单位'] ):
-    app = xw.App(visible=False, add_book=False)
-    wb = app.books.open(fname)
-    ws = wb.sheets[sheetname]
-    olddata = pd.DataFrame(pd.read_excel(fname, sheetname,dtype = {'单据号':str}))
+    olddata = pd.read_excel(fname, sheetname,dtype = {'单据号':str})
     data = pd.concat([olddata, newdata])
     col_names = data.columns.to_list()
     data.drop_duplicates(subset=in_subject, keep='first', inplace=True)
@@ -124,11 +121,19 @@ def concatAndQuchong(fname,sheetname,newdata,in_subject,index_col=['日期','单
     data = data[col_names]                               #按原来列顺序
     # first_col = data.columns[0]                   #取第一列
     # data = data.set_index(first_col)      #按首列索引
+    #df_temp = data.applymap(lambda x: str(x) if pd.api.types.is_datetime64_dtype else x)  # 可行
+    #data1 = data.astype(data.dtypes.replace({'datetime64[ns]': str}))    #可行
+    app = xw.App(visible=False, add_book=False)
+    wb = app.books.open(fname)
+    ws = wb.sheets[sheetname]
     ws.clear_contents()
-    ws.range('A1').options(pd.DataFrame, index=False).value = data
     wb.save()
     wb.close()
     app.quit()
+
+    with pd.ExcelWriter(fname, engine='openpyxl', date_format='yyyy-m-d', mode='a',
+                        if_sheet_exists='overlay') as writer:
+        data.to_excel(writer, sheetname, index=False)
     return fname
 
 def lingDun(x):
