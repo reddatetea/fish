@@ -31,6 +31,7 @@ import addzhiRukuPd
 from easygui import buttonbox
 import zhiNewGongyingshang
 import easygui
+import openpyxl
 
 
 def xlsToXlsx(fname):
@@ -131,7 +132,9 @@ def concatAndQuchong(fname,sheetname,newdata,in_subject,index_col=['日期','单
     wb.close()
     app.quit()
 
-    with pd.ExcelWriter(fname, engine='openpyxl', date_format='yyyy-m-d', mode='a',
+    with pd.ExcelWriter(fname,engine = 'openpyxl',
+    date_format="YYYY-MM-DD",
+    datetime_format="YYYY-MM-DD HH:MM:SS",mode='a',
                         if_sheet_exists='overlay') as writer:
         data.to_excel(writer, sheetname, index=False)
     return fname
@@ -222,6 +225,14 @@ def addmeitianLiushuizhang():
             ysl_fname = r'F:\a00nutstore\006\zw\原材料实时流水账\原材料实时流水账.xlsx'
             beifen(ysl_fname)
             concatAndQuchong(ysl_fname, '流水账', ysl, ysl_subject)
+            wb = openpyxl.load_workbook(ysl_fname)
+            ws = wb['流水账']
+            max_row = ws.max_row
+            for i in range(2, max_row + 1):
+                ws[f'A{i}'].number_format = 'yyyy-m-d'
+                ws[f'L{i}'].number_format = 'yyyy-m-d'
+
+            wb.save(ysl_fname)
             # quchong.delchongfu(ysl_fname,  '流水账',ysl_subject)   #20211217两次去重才行
         else:
             pass
