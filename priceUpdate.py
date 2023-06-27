@@ -4,11 +4,12 @@ import easygui
 import os
 import xlwings as xw
 from beifenFile import beifen
+import openpyxl
 
 # df1 = pd.read_clipboard(sep='\\n+',usecols = [0,1,2,3,19])
 keys = ['日期','单据号','供货单位','品名']
 df1 = pd.read_clipboard(sep='\\n+',dtype = {'单据号':str})
-#df1['送货日期'].astype('datetime64[ns]')
+df1['日期']=pd.to_datetime(df1['日期'],format='%Y-%m-%d')
 df1 =df1[keys+['合同金额']]
 df1 = df1.astype({'日期':'datetime64[ns]'})
 df1.dropna(subset=['合同金额'],inplace=True)
@@ -33,8 +34,23 @@ app = xw.App(visible = False,add_book = False)
 wb = app.books.open(fname1)
 ws = wb.sheets[sheet_name]
 ws.clear_contents()
-ws.range('A1').options(pd.DataFrame, index=False).value = df9
-wb.save(fname1)
+wb.save()
+wb.close()
 app.quit()
+
+with pd.ExcelWriter(fname1,engine = 'openpyxl',
+date_format="YYYY-MM-DD",
+datetime_format="YYYY-MM-DD HH:MM:SS",mode='a',
+                    if_sheet_exists='overlay') as writer:
+    df9.to_excel(writer, sheet_name, index=False)
+wb = openpyxl.load_workbook(fname1)
+ws = wb[sheet_name]
+max_row = ws.max_row
+for i in range(2, max_row + 1):
+    ws[f'A{i}'].number_format = 'yyyy-m-d'
+    ws[f'L{i}'].number_format = 'yyyy-m-d'
+    ws[f'S{i}'].number_format = 'yyyy-m-d'
+wb.save(fname1)
+
 easygui.msgbox('程序结束')
 # os.startfile(fname1)

@@ -1,12 +1,15 @@
 '''
 柔板的匹配，提取厚度、长度、宽度，计算合同单价
 '''
+'''
+柔板的匹配，提取厚度、长度、宽度，计算合同单价
+'''
 import re
 import pandas as pd
 
 def jiaotaochicun(temp):
     string = temp.strip()
-    pattern1 = r'(?P<leibie>XR|夏天|冬天|EVA|EVA\s+|EVA\s+DJL)(?P<kaibie>16|32|48|64|80|100)K(?P<yeshu>\d{2,3})胶套'
+    pattern1 = r'(?P<leibie>XR|夏天|冬天|EVA|EJL|EVA\s+|EJL\s|勤问|EVA\s+DJL)(?P<kaibie>16|32|48|64|80|100)K(?P<yeshu>\d{2,3})胶套'
     pattern2 = r'胶套\w*(?P<chang>\d{3,4})\*(?P<kuan>\d{3,4})'
     regexp1 = re.compile(pattern1)
     pipei1 = regexp1.search(string)
@@ -21,7 +24,7 @@ def jiaotaochicun(temp):
         leibie = pipei1.group('leibie')
         kaibie = float(pipei1.group('kaibie'))
         yeshu = float(pipei1.group('yeshu'))
-        if 'EVA' in leibie :
+        if 'EVA' in leibie or '勤问' in leibie or 'EJL' in leibie:
             leibie = 'gaoji'
         else :
             leibie = 'putong'
@@ -35,8 +38,9 @@ def jiaotaochicun(temp):
         kuan = float(pipei2.group('kuan'))
     return leibie,kaibie,yeshu,chang,kuan
 
+
 def main():
-    temp = 'XR16K200胶套冬379*257'
+    temp = '勤问32K80胶套291*201'
     leibie,kaibie,yeshu,chang,kuan = jiaotaochicun(temp)
     print(leibie,kaibie,yeshu,chang,kuan)
 
