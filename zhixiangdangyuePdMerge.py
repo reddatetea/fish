@@ -9,7 +9,7 @@ import os
 import re
 import datetime
 import easygui
-import zhixiangNewGongyinshang
+import NewGongyinshang
 
 def Dangyue(start_riqi,end_riqi):
     dtrq = datetime.date.today().strftime('%Y%m%d')    #当天日期
@@ -17,10 +17,11 @@ def Dangyue(start_riqi,end_riqi):
     os.chdir(path)
     filename = '纸箱当月入库%s.xlsx'%dtrq
     fname = os.path.join(path, filename)
-    jianchen = zhixiangNewGongyinshang.zhixiangGongyingshang()
+    fname_gy = r'F:\a00nutstore\006\zw\price\纸箱供应商.xlsx'
+    jianchen = NewGongyinshang.Gongyingshang(fname_gy)
     # price_dic = zhixiangdanjiajisuan.priceDic()
     fname2 = r'F:\a00nutstore\006\zw\原材料实时流水账\原材料实时流水账.xlsx'
-    df = pd.read_excel(fname2, sheet_name='流水账',usecols=[0,1,2,3,5,6,7,9,10],index_col=0)    #usecols直接取所取的行
+    df = pd.read_excel(fname2, sheet_name='流水账',usecols=[0,1,2,3,5,6,7,9,10],index_col=0,dtype = {'单据号':str})    #usecols直接取所取的行
     df.sort_index(inplace=True)  # 对索引排序
     df = df.truncate(before=start_riqi, after=end_riqi)
     df = df.loc[df['供货单位'].isin (jianchen)] #isin非常实用

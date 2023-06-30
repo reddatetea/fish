@@ -10,8 +10,6 @@ import easygui
 
 def addnew():
     fname = r'F:\a00nutstore\006\zw\ZHIXIANG\2020纸箱入库.xlsx'
-    path,filename = os.path.split(fname)
-    os.chdir(path)
     wb = openpyxl.load_workbook(fname)
     ws = wb['纸箱尺寸']
     maxrows = ws.max_row
@@ -25,7 +23,7 @@ def addnew():
     choice = easygui.buttonbox(msg=msg1,title=title1,choices=sheetnames)
     ws1 = wb1[choice]
     maxrow1s = ws1.max_row
-    pinming_num = column_index_from_string('D')
+    pinming_num = column_index_from_string('E')
     chang_num = column_index_from_string('G')
     kuan_num = column_index_from_string('H')
     gao_num = column_index_from_string('I')
@@ -36,9 +34,9 @@ def addnew():
         beizhu = ws1.cell(row, beizhu_num).value
         if beizhu not in ['',None]:
             i = i+1
-            gongyingshang = ws1.cell(row, 1).value
-            riqi = ws1.cell(row, 2).value
-            danhao = ws1.cell(row, 3).value
+            gongyingshang = ws1.cell(row, 3).value
+            riqi = ws1.cell(row, 1).value
+            danhao = ws1.cell(row, 2).value
             pinming = ws1.cell(row,pinming_num).value
             chang = ws1.cell(row, chang_num).value
             kuan = ws1.cell(row, kuan_num).value
@@ -46,6 +44,7 @@ def addnew():
             #添加到纸箱尺寸中
             ws.cell(maxrows+i,2,value = gongyingshang)
             ws.cell(maxrows + i, 3, value= riqi)
+            ws.cell(maxrows + i, 3).number_format = 'yyyy-m-d'
             ws.cell(maxrows + i, 4, value= danhao)
             ws.cell(maxrows + i, 5, value= pinming)
             ws.cell(maxrows +i, 6, value= chang)
@@ -55,10 +54,13 @@ def addnew():
             continue
     wb.save(fname)
     wb1.close()
+    easygui.msgbox('程序结束')
 
 
 def main():
+    os.chdir(r'F:\a00nutstore\006\zw\duizhang')
     addnew()
+
 
 if __name__ == '__main__':
     main()
