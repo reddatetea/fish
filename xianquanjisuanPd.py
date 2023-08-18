@@ -50,7 +50,7 @@ def chicun(temp):
     return guige,color,cishu
 
 def main():
-    temp = '1MM黑线环'     #0.95mm黑线环
+    temp = '1*19黑色双线环'     #0.95mm黑线环
     guige,color,cishu = chicun(temp)
     print(guige,color,cishu)
 
