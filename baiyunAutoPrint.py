@@ -12,7 +12,7 @@ import excelfastsetings
 
 
 def toushiBiao(fname, ws_name, zhiziduan,hangziduan,jisuanfangsi,saixuanliezhis):
-    fname1 = r'材料入库单.xlsx'
+    fname1 = r'F:\a00nutstore\fishc\材料入库单.xlsx'
     app = xw.App(visible = False,add_book = False)
     wb = app.books.open(fname)
     nwb = app.books.open(fname1)

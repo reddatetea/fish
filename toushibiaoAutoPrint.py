@@ -70,7 +70,7 @@ def main():
     zhiziduan = ['入库数量', '入库金额']
     hangziduan = 'cwName'
     jisuanfangsi = 'sum'
-    saixuanliezhi = easygui.enterbox('请输入期间（如2022-01)')
+    saixuanliezhi = easygui.enterbox(msg = '请输入期间（如2022-01)')
     gongyingshangs = choiceJPrintGongyingshangs(fname,ws_name,saixuanliezhi)
     fname1 = r'F:\a00nutstore\fishc\材料入库单.xlsx'
     fname1 = toushiBiao(fname1,fname, ws_name, gongyingshangs, zhiziduan, hangziduan, jisuanfangsi, saixuanliezhi)

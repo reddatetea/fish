@@ -1,0 +1,1 @@
+我来补充下。发现了dt.components的话没有考虑进去天和小时，改用了dt.total_seconds/60

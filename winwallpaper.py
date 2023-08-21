@@ -48,6 +48,7 @@ def main():
         xh = '%03d'%(i+1)
         new_name_file = new_name + xh + '.jpg'
         shutil.copy(path, os.path.join(target_path,new_name_file))
+    os.startfile(target_path)
 
 if __name__ == '__main__':
     main()
