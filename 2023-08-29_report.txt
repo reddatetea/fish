@@ -1,0 +1,7 @@
+
+Movies report
+-------------
+
+Date:2023-08-29 07:35:30.161000
+Movies seen in the last 30 days:3
+Total minutes:376

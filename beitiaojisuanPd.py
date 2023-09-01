@@ -21,7 +21,7 @@ def beitiaoJisuan(beitiaoName):
     return leibie,kuan
 
 def main():
-    beitiao = '25MM80克308兰背条'
+    beitiao = '26MM504灰背条'
     leibie,kuan=beitiaoJisuan(beitiao)
     print(leibie,kuan)
     print(type(kuan))
