@@ -1,0 +1,119 @@
+ 
+I N V O I C E
+Page 1 of 2
+Invoice To: Invoice From: Remit To:
+   
+HOLIDAY INN  IHG (SHANGHAI) LIMITED INTER CONTINENTAL 
+WUHAN RIVERSIDE 22/F, CITIGROUP TOWER HOTELS GROUP
+NO. 33, HUAYUANSHIQIAO ROAD INTER CONTINENTAL 
+NO.3 QINGCHUAN AVENUE, HANYANG 
+PILOT FREE TRADE ZONE HOTELS GROUP 
+DISTRICT SHANGHAI  200120 (SHANGHAI) LTD
+WUHAN CHINA  HSBC SHANGHAI 
+WUHAN  430050 BRANCH/ALIPAY
+CNY A/C NO: 088-058482-
+CHINA
+001  HSBCCNSH
+HSBC TOWER 101 YIN 
+CHENG EAST ROAD
+PUDONG SHANGHAI  
+CHINA 
+Customer #: 0684100 Tax Invoice #: P000925215 Total Rooms:  0
+ 
+Holidex #: WUHQC Tax Invoice Date: 27-Apr-2023 Rooms Sold: 0
+ 
+   
+Buyer Tax Reg ID: CN999999999 Due Date: 15-May-2023 Rooms Available: 0
+ 
+Seller Tax Reg Id: 913100007653255 Declaration Point: Invoice Gross Room  0.00
+ 
+44Y Revenue:
+ 
+Date of tax Point: 27-Apr-2023
+ 
+Exchange Rate: 1.00000000 Currency:
+   
+ 
+Tax Treatment: DSS - Domestic Service Sale
+  
+ 
+Net Gross Gross Base
+Transaction Transaction Tax Tax Transaction Currency Base
+Description Currency Amount Percent Amount Amount Amount Currency
+SBRP CNY 584.52 0.0000% 0.00 584.52 584.52 CNY
+ 
+SBRP MONTHLY FEE MARCH 2023
+PO Ref: AIC0007363
+ 
+PRICE OPTIMIZATION CNY 206.30 0.0000% 0.00 206.30 206.30 CNY
+ 
+PRICE OPTIMIZATION EMEAGCMAR
+PO Ref: AIC0007363
+ 
+SBRP CNY (33.08) 0.0000% 0.00 (33.08) (33.08) CNY
+ 
+VAT 5 POINT 6604 PERCENT SBRP MONTHLY FEE MARCH 2023
+PO Ref: AIC0007363
+ 
+PRICE OPTIMIZATION CNY (11.69) 0.0000% 0.00 (11.69) (11.69) CNY
+ 
+VAT 5 POINT 6604 PERCENT PRICE OPTIMIZATION EMEAGCMAR
+PO Ref: AIC0007363
+ 
+SBRP CNY 33.08 0.0000% 0.00 33.08 33.08 CNY
+ 
+VAT 5 POINT 6604 PERCENT SBRP MONTHLY FEE MARCH 2023
+PO Ref: AIC0007363
+ 
+PRICE OPTIMIZATION CNY 11.69 0.0000% 0.00 11.69 11.69 CNY
+ 
+VAT 5 POINT 6604 PERCENT PRICE OPTIMIZATION EMEAGCMAR
+PO Ref: AIC0007363
+ 
+Amount Due CNY 790.82 0.00 790.82 790.82 CNY
+ 
+ 
+ 
+  
+I N V O I C E
+Page 2 of 2
+Invoice To: Invoice From: Remit To:
+   
+HOLIDAY INN  IHG (SHANGHAI) LIMITED INTER CONTINENTAL 
+WUHAN RIVERSIDE 22/F, CITIGROUP TOWER HOTELS GROUP
+NO. 33, HUAYUANSHIQIAO ROAD INTER CONTINENTAL 
+NO.3 QINGCHUAN AVENUE, HANYANG 
+PILOT FREE TRADE ZONE HOTELS GROUP 
+DISTRICT SHANGHAI  200120 (SHANGHAI) LTD
+WUHAN CHINA  HSBC SHANGHAI 
+WUHAN  430050 BRANCH/ALIPAY
+CNY A/C NO: 088-058482-
+CHINA
+001  HSBCCNSH
+HSBC TOWER 101 YIN 
+CHENG EAST ROAD
+PUDONG SHANGHAI  
+CHINA 
+Customer #: 0684100 Tax Invoice #: P000925215 Total Rooms:  0
+ 
+Holidex #: WUHQC Tax Invoice Date: 27-Apr-2023 Rooms Sold: 0
+ 
+   
+Buyer Tax Reg ID: CN999999999 Due Date: 15-May-2023 Rooms Available: 0
+ 
+Seller Tax Reg Id: 913100007653255 Declaration Point: Invoice Gross Room  0.00
+ 
+44Y Revenue:
+ 
+Date of tax Point: 27-Apr-2023
+ 
+Exchange Rate: 1.00000000 Currency:
+   
+ 
+Tax Treatment: DSS - Domestic Service Sale
+Please remit your payment to the above bank account in the base currency of the invoice.
+Either send your remittance advice to P O Box 223 St Leonards Australia 2065  or fax to +612 9437 6755 or email the electronic format to asia.
+remit@ichotelsgroup.com
+Should you have any queries please contact the Sydney Accounts Receivable Team on +612 9935 8300 or email them at asia.
+remit@ichotelsgroup.com
+ 

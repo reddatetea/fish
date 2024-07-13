@@ -29,14 +29,14 @@ pyfile = easygui.fileopenbox(msg='请点选要打包的py文件')
 file_way = r'-F -w -i'
 tmpdir_way = r'--runtime-tmpdir=..'
 #复制upx文件夹至要打包脚本所在文件夹
-source_path = r'F:\a00nutstore\yingyongchengxu\upx-3.96-win64'
+source_path = r'F:\a00nutsrore\yingyongchengxu\upx-3.96-win64'
 target_path = os.path.join(path,os.path.split(source_path)[-1])
 if not os.path.exists(target_path):
     # 如果目标路径不存在原文件夹的话就创建
     os.makedirs(target_path)
 if os.path.exists(source_path):
     # 如果目标路径存在原文件夹的话就先删除
-    shutil.rmtree(target_path)
+    shutil.rmtree(target_path,)
 shutil.copytree(source_path, target_path)
 upx_way = ''.join(['--upx-dir=',target_path])  #不能有空格''
 

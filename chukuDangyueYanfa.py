@@ -54,10 +54,10 @@ def chukuDangyue(df5,fname1,chuku_name):
     datas = []
     grouped = table.groupby('leibie')
     for k, d in grouped:
-        j = d.append(d.sum().rename((k, '', '')))  # 关键操作，从百度上照搬！
+        j = d._append(d.sum().rename((k, '', '')))  # 关键操作，从百度上照搬！
         datas.append(j)
     df_total = pd.concat(datas)
-    out = df_total.append(table.sum().rename(('005原材料', '', '合计')))
+    out = df_total._append(table.sum().rename(('005原材料', '', '合计')))
     # out.index = pd.MultiIndex.from_tuples(out.index)
     out = out.reset_index()
     out = out.assign(科目编码=out.apply(lambda x: xiaoji(x), axis=1))  # axis很重要
@@ -101,7 +101,7 @@ def main():
     df2_df1['金额'] = round(df2_df1['出库'] * df2_df1['单价'], 2)  #根据整数数量，重新计算金额
     df2_df1 = df2_df1.loc[:, ['科目编码', '科目名称', '出库', '单价', '金额']]  #重新排列,研发明细
     total = sum(df2_df1['金额'])
-    df_yanfa = df2_df1.append({'科目编码': '合计', '金额': total}, ignore_index=True)
+    df_yanfa = df2_df1._append({'科目编码': '合计', '金额': total}, ignore_index=True)
     df2_df1_1 = df2_df1.set_index(['科目编码', '科目名称'])
     df2_df1_1 = df2_df1_1 * (-1)
     df2_df1_1['单价'] = 0

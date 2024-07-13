@@ -15,12 +15,12 @@ def Dangyue(start_riqi,end_riqi):
     os.chdir(path)
     filename = '背条当月入库%s.xlsx'%dtrq
     fname = os.path.join(path, filename)
-    fname_gy = r'F:\a00nutstore\006\zw\price\背条供应商.xlsx'
+    fname_gy = r"F:\a00nutstore\006\zw\price\背条供应商.xlsx"
     jianchen = NewGongyinshang.Gongyingshang(fname_gy)
     # jianchen = {'昆山楚宏纸塑材料有限公司':'昆山楚宏',
     #             '苏州市三鑫纸艺':'苏州三鑫'
     #             }
-    fname2 = r'F:\a00nutstore\006\zw\原材料实时流水账\原材料实时流水账.xlsx'
+    fname2 = r"F:\a00nutstore\006\zw\原材料实时流水账\原材料实时流水账.xlsx"
     df = pd.read_excel(fname2, sheet_name='流水账', usecols=[0, 1, 2, 3, 5, 6, 7, 9, 10],index_col=0,dtype = {'单据号':str})  # usecols直接取所取的行
     df.sort_index(inplace=True)  # 对索引排序
     df = df.truncate(before=start_riqi, after=end_riqi)
@@ -36,7 +36,7 @@ def Dangyue(start_riqi,end_riqi):
     return fname,jianchen,df
 
 def Hetong(end_riqi):
-    fname = r'F:\a00nutstore\006\zw\price\背条合同价格.xlsx'
+    fname = r"F:\a00nutstore\006\zw\price\背条合同价格.xlsx"
     sheet_name = '合同单价'
     df = pd.read_excel(fname, sheet_name, index_col=0)
     # df['kuan'] = df['kuan'].astype(str)

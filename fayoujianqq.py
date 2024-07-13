@@ -25,7 +25,7 @@ filenames = os.listdir(file_path)
 mail_host = "smtp.qq.com"   # 设置服务器
 mail_user = "1142760803"     # 用户名
 ail_pass = ""  # 口令
-mail_pass = "rhkxdzhbutzjihij"  # 口令
+mail_pass = "zdeefgvvhmbqgeeg"  # 口令
 # 配置发件人、收件人信息
 sender = '1142760803@qq.com' # 发件人邮箱
 # yesterday = (datetime.date.today() + datetime.timedelta(days=-1)).strftime('%Y%m%d')
@@ -44,16 +44,19 @@ msyx = ['940433711@qq.com']
 ccpyx = ['616012311@qq.com', '173937271@qq.com', '523772567@qq.com', '305124514@qq.com', '396354827@qq.com',
          '312963233@qq.com','310132404@qq.com']
 # wpbyx产成品邮箱列表
-wmbyx = ['1784506832@qq.com']    #黄茜
+wmbyx = ['1784506832@qq.com']    #黄茜,2023-10-31add 马菁
 
 # 零配件邮箱列表
 lpjyx = ['1175599535@qq.com', '471528579@qq.com', '441833636@qq.com', '616012311@qq.com', '173937271@qq.com', ]
 # 自己邮箱列表
 zjyx = ['rightcwb@sina.com']
+
+# 财务部邮箱，马菁
+cwbyx = ['5653376@qq.com']
 # 原材料邮箱列表+密送列表+自己邮箱列表    #20220214取消发自己邮箱
 yclyxs = yclyx + msyx + wmbyx
 # 产成品邮箱列表+密送列表+自己邮箱列表    #20220622增加外贸部邮箱
-ccpyxs = ccpyx + wmbyx + msyx
+ccpyxs = ccpyx + wmbyx + msyx + cwbyx 
 # 零配件邮箱列表+自己邮箱列表     #20220214取消发自己邮箱
 lpjyxs = lpjyx
 
