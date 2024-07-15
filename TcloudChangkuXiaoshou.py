@@ -23,8 +23,8 @@ def chuliChangku(fname,sheet_name):
     df = df[~df['类别'].str.contains('小计|累计|合   计')]
     df = df[~(abs(df['本日数量'] - 0) < 0.00001)]
     return df
-fname = r"F:\a00nutstore\008\zw08\2024\2024-06\2024.6.25数据.xls"
-sheet_name  =  r'6.25'
+fname = r"F:\a00nutstore\008\zw08\用友报价\产成品仓库2024.7.15数据.xls"
+sheet_name  =  r'AAA'
 df = chuliChangku(fname,sheet_name)
 
 def addXiaoshouhuohao(df,dic_ck_xs):
@@ -77,13 +77,13 @@ def weiyihuXiaoshouhuohao(df_xs, df_ck, dic_xs_ck):
         '品名',
         '销售部存货大类编码'
     ]]
-    mg = pd.merge(left, right, left_on='货号', right_on='货号')
+    mg = pd.merge(left, right, left_on='货号', right_on='货号',how = 'right')
     mg['本日数量件'] = mg['本日数量本'] / mg['含量']
     mg = mg.assign(仓库货号=mg['货号'].map(dic_xs_ck))
     return mg
 
 
 result = weiyihuXiaoshouhuohao(df_xs, df_ck, dic_xs_ck)
-result.to_excel('销售仓库价格库存1.xlsx',index = False)
+result.to_excel('销售仓库价格库存0715-1.xlsx',index = False)
 
 
