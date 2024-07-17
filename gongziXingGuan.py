@@ -75,7 +75,7 @@ def main():
         sheet_name = easygui.choicebox(title='请点选工作表', choices=sheetnames)
         return fname,df,sheet_name
     def getDicJibie():
-        fname1 = r"F:\a00nutstore\008\gongzi\工资级别.xlsx"
+        fname1 = r"F:\a00nutstore\008\zw08\gongzi\工资级别.xlsx"
         sheet_name1 = r'级别'
         df_jibie = pd.read_excel(fname1, sheet_name1, dtype={'账号': "str"})
         dic_gongzi = dict(zip(df_jibie['账号'], zip(df_jibie['基本工资0'], df_jibie['考评基数0'], df_jibie['效益奖金0'])))
