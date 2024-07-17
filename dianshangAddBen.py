@@ -7,8 +7,13 @@ import openpyxl
 import easygui
 from openpyxl.styles import Font, Border, Side, Fill, Alignment
 
+<<<<<<< HEAD
 fname = easygui.fileopenbox('请点选电商当日出库文件')
 # fname = r"F:\a00nutstore\008\zw08\电商\电商7-16订单表.xlsx"
+=======
+# fname = easygui.fileopenbox('请点选电商当日出库文件')
+fname = r"F:\a00nutstore\008\zw08\电商\电商7-16订单表.xlsx"
+>>>>>>> f8e5a2329836e1e0b3d10d3d98e7ecc8dc4e71f3
 sheet_name = 0
 skiprows = 0
 df = pd.read_excel(fname,sheet_name = sheet_name,skiprows = skiprows,dtype = {'商品ID':'str','运单号':'str',})
@@ -41,6 +46,10 @@ df1['规格名称1'] = df1['规格名称1']. \
     str.replace('(10本)', '10本'). \
     str.replace('(5本)', '5本'). \
     str.replace('(3本)', '3本'). \
+<<<<<<< HEAD
+=======
+    str.replace('(20本)', '20本'). \
+>>>>>>> f8e5a2329836e1e0b3d10d3d98e7ecc8dc4e71f3
     str.replace('五本', '5本'). \
     str.replace('三本', '3本'). \
     str.replace('20本', '(20本)'). \
@@ -56,7 +65,11 @@ df1.index = range(1, len(df1) + 1)
 df1.index_name = '序号'
 df1.insert(0, '序号', range(1, len(df1) + 1))
 max_xuhao = len(df1) + 1
+<<<<<<< HEAD
 df1.loc[max_xuhao] = {'序号': max_xuhao, '数量': df1['数量'].sum(),'本数': df1['本数'].sum()}
+=======
+df1.loc[max_xuhao] = {'序号': max_xuhao, '本数': df1['本数'].sum()}
+>>>>>>> f8e5a2329836e1e0b3d10d3d98e7ecc8dc4e71f3
 df1['序号'] = df1['序号'].replace(max_xuhao, '小计')
 
 with pd.ExcelWriter(fname,engine = 'openpyxl',mode='a', if_sheet_exists='overlay') as writer:

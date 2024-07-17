@@ -103,7 +103,7 @@ def printseting(fname1, riqi):
             ws.oddFooter.right.size = 12  # 页脚右 字体大小
             ws.oddFooter.right.font = "书体坊米芾体"  # 页脚右 字体
             ws.oddFooter.right.color = "000000"  # 页脚右 字体颜色
-            ws.page_margins = openpyxl.worksheet.page.PageMargins(top=0.48, header=0.5, left=0.51, right=0.34,
+            ws.page_margins = openpyxl.worksheet.page.PageMargins(top=0.48, header=0.5, left=0.21, right=0.24,
                                                                   footer=0.5,
                                                                   bottom=1)
             for i in ws.iter_rows():      #将零值替换为空
