@@ -1,18 +1,18 @@
 '''
-电商出库将规格型号中的本数提取出来
+电商出库将规格型号中的本数提取出来,较多正则处理
 '''
 import re
+import os
 import pandas as pd
 import openpyxl
 import easygui
 from openpyxl.styles import Font, Border, Side, Fill, Alignment
 
-# fname = easygui.fileopenbox('请点选电商当日出库文件')
-fname = r"F:\a00nutstore\008\zw08\电商\7-17订单表.xlsx"
+fname = easygui.fileopenbox('请点选电商当日出库文件')
+# fname = r"F:\a00nutstore\008\zw08\电商\7-17订单表.xlsx"
 sheet_name = 0
 skiprows = 0
 df = pd.read_excel(fname,sheet_name = sheet_name,skiprows = skiprows,dtype = {'商品ID':'str','运单号':'str',})
-df.dropna(subset = ['订单号'],inplace = True)
 df.dropna(subset = ['订单号'],inplace = True)
 df['总价']  = df['总价'] .str.replace('￥','')
 df['实收'] = df['实收'].str.replace('￥','')
@@ -23,12 +23,21 @@ lst = ['订单号',
        '规格编码',
        '数量',
        ]
-
+dic = {'五':5,
+        '六':6,
+        '七':7,
+        '八':8,
+        '九':9,
+        '十':10,
+        '四':4,
+        '三':3,
+        '二':2,
+        '一':1}
 def addBen(string):
-    dic = {'五':5,'三':3}
+
     # string = r'(81本)'
     pattern1 = r'(?P<ben>\d+)本'
-    pattern2 = r'(?P<ben>[五三])本'
+    pattern2 = r'(?P<ben>[十九八七六五四三二一])本'
     regexp1 = re.compile(pattern1)
     mat1 = regexp1.search(string)
     regexp2 = re.compile(pattern2)
@@ -90,6 +99,7 @@ for row in range(2, max_row + 1):  # 从第二行开始，设置单元格格式
     for col in range(1, max_column + 1):
             ws.cell(row, col).border = thin_bian
 
-
+wb.active = ws
 wb.save(fname)
+os.startfile(fname)
 
