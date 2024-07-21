@@ -335,16 +335,7 @@ for df, sheetname in zip(dfs, sheetnames):
     elif sheetname == '合计':
         ws = wb.create_sheet(sheetname)
         for i in df:
-            ws.append(i)
-    else:
-        ws = wb.create_sheet(sheetname)
-        df = [title] + df
-        for i in df:
-            ws.append(i)
-wb.save(fname_canchengpin)
-printseting(fname_canchengpin, riqi)
-# easygui.msgbox(msg = '程序结束运行')
-fname0 = res_path('img/leiji.xlsx')
+            ws.append(i)fname0 = res_path('img/leiji.xlsx')
 wb0 = openpyxl.load_workbook(res_path('img/leiji.xlsx'))
 ws0 = wb0.active
 area0 = ws0['A1:H12']
@@ -354,6 +345,15 @@ cell_start1 = ws['A1']
 formatPainter.stylesFormat(ws, area0, cell_start1)
 wb0.close()
 wb.save(fname_canchengpin)
+    else:
+        ws = wb.create_sheet(sheetname)
+        df = [title] + df
+        for i in df:
+            ws.append(i)
+wb.save(fname_canchengpin)
+printseting(fname_canchengpin, riqi)
+# easygui.msgbox(msg = '程序结束运行')
+
 os.startfile(fname_canchengpin)
 
 
