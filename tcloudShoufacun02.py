@@ -338,8 +338,8 @@ with pd.ExcelWriter(fname_canchengpin, engine='openpyxl', mode='a', if_sheet_exi
     df_heji.to_excel(writer, sheet_name='合计', index_label='类别')
 
 printseting(fname_canchengpin, riqi)
-fname0 = res_path('img/leiji.xlsx')
-wb0 = openpyxl.load_workbook(res_path('img/leiji.xlsx'))
+fname0 = res_path('img\leiji.xlsx')
+wb0 = openpyxl.load_workbook(res_path('img\leiji.xlsx'))
 ws0 = wb0.active
 area0 = ws0['A1:H12']
 wb = openpyxl.load_workbook(fname_canchengpin)

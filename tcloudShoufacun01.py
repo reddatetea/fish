@@ -10,9 +10,7 @@ import openpyxl
 from openpyxl.styles import Font, Border, Side, Fill, Alignment
 import formatPainter
 
-# store_dic = {'001库':"df.num == '001'",'002电商库':"df.num == '002'",'总库':"(df.num == '001') | (df.num == '002')"}
-lst = ['仓库编码',
-       '仓库',
+lst = [
     '存货分类 (1级)',
     '存货分类 (2级)',
     '存货分类 (3级)',
@@ -43,8 +41,6 @@ lst = ['仓库编码',
     '计量单位组合.3']
 
 lst2 = [
-    'store',
-    'num',
     'class01',
     'class02',
     'class03',
@@ -127,23 +123,15 @@ lst_result = ['类别', '货号', '品名',
               '结余']
 
 
-def chuli(fname,store_num):
+def chuli(fname):
     df = pd.read_excel(fname, skiprows=7)
     df = df.iloc[:, 1:]
     df.columns = lst
     df.columns = lst2
-    if store_num == '001库':
-        df = df.loc[df.store == '001']
-    elif store_num == '002电商库':
-        df = df.loc[df.store == '002']
-    else:
-        df = df.loc[(df.store == '001') | (df.store == '002')]
-
     df['content'] = df['end_ben'] / df['end_jian']
-    df = df[df['store'] != '制表人:']
-    df = df[df['store'] != '合计：']
-    df = df[df['store'].notnull()]
-    df = df.iloc[:, 2:]
+    df = df[df['class01'] != '制表人:']
+    df = df[df['class01'] != '合计：']
+    df = df[df['class01'].notnull()]
     df = df[lst3]
     return df
 
@@ -264,18 +252,15 @@ def res_path(relative_path):
         base_path = os.path.abspath(".")
     return os.path.join(base_path, relative_path)
 
-#first,choice仓库编号
-msg = '请点选仓库'
-nums = ['001库','002电商库','总库']
-num = easygui.buttonbox(msg,choices = nums)
+
 msg = '请点选产成品"当日"工作表'
 fname = easygui.fileopenbox(msg, title='AAA')
 path, filename = os.path.split(fname)
 os.chdir(path)
-df1 = chuli(fname,num)
+df1 = chuli(fname)
 msg = '请点选产成品"累计"工作表'
 fname2 = easygui.fileopenbox(msg, title='BBB')
-df2 = chuli(fname2,num)
+df2 = chuli(fname2)
 df1 = df1[lst01_yesterday]
 df1.columns = lst02_yesterday
 
@@ -338,8 +323,8 @@ with pd.ExcelWriter(fname_canchengpin, engine='openpyxl', mode='a', if_sheet_exi
     df_heji.to_excel(writer, sheet_name='合计', index_label='类别')
 
 printseting(fname_canchengpin, riqi)
-fname0 = res_path('img/leiji.xlsx')
-wb0 = openpyxl.load_workbook(res_path('img/leiji.xlsx'))
+fname0 = res_path('img\leiji.xlsx')
+wb0 = openpyxl.load_workbook(res_path('img\leiji.xlsx'))
 ws0 = wb0.active
 area0 = ws0['A1:H12']
 wb = openpyxl.load_workbook(fname_canchengpin)
@@ -349,6 +334,7 @@ formatPainter.stylesFormat(ws, area0, cell_start1)
 wb0.close()
 wb.save(fname_canchengpin)
 os.startfile(fname_canchengpin)
+
 
 
 
