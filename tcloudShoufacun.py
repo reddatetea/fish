@@ -271,7 +271,7 @@ msg = '请点选仓库'
 nums = ['001库', '002电商库', '总库']
 num = easygui.buttonbox(msg, choices=nums)
 msg = '请点选产成品"当日"工作表'
-fname = easygui.fileopenbox(msg, title='AAA')
+fname = easygui.fileopen1box(msg, title='AAA')
 path, filename = os.path.split(fname)
 os.chdir(path)
 df1 = chuli(fname, num)
