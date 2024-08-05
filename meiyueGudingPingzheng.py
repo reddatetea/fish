@@ -49,13 +49,13 @@ fname_fix = r"F:\a00nutstore\008\zw08\2024\每月固定凭证.xlsx"
 wb = openpyxl.load_workbook(fname_fix)
 ws = wb['pingzheng']
 #写入数据
-ws['D4'].value = yingfa
-ws['E5'].value = yingfa
-ws['D6'].value = expense_zhizhao
-ws['D7'].value = expense_xingguan
-ws['D8'].value = expense_design
-ws['D9'].value = expense_sale
-ws['E10'].value = expense_zhizhao + expense_xingguan + expense_design + expense_sale
+ws['D5'].value = yingfa
+ws['E6'].value = yingfa
+ws['D7'].value = expense_zhizhao
+ws['D8'].value = expense_xingguan
+ws['D9'].value = expense_design
+ws['D10'].value = expense_sale
+ws['E11'].value = expense_zhizhao + expense_xingguan + expense_design + expense_sale
 #社保调整写入
 ws['D24'].value = yanglao * -1
 ws['D25'].value = yanglao
