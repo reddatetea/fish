@@ -2,6 +2,7 @@
 对T+CLOUD上的收发存汇总表进行二次开发，与公司以前的格式一致
 此版本加零结存，将抄本中的小学生按原顺序排列
 此版本增加一个按销售订单生成昨日出库的选项
+此版按工厂导出的销售单格式进行处理
 '''
 import os
 import datetime
@@ -196,25 +197,20 @@ def chuli(fname, store_num):
     df = df[lst3]
     return df
 
-
-def chuli(fname, store_num):
-    df = pd.read_excel(fname, skiprows=7)
-    df = df.iloc[:, 1:]
-    df.columns = lst
-    df.columns = lst2
-    if store_num == '001库':
-        df = df.loc[df.store == '001']
-    elif store_num == '002电商库':
-        df = df.loc[df.store == '002']
-    else:
-        df = df.loc[(df.store == '001') | (df.store == '002')]
-
-    df['content'] = df['end_ben'] / df['end_jian']
-    df = df[df['store'] != '制表人:']
-    df = df[df['store'] != '合计：']
-    df = df[df['store'].notnull()]
-    df = df.iloc[:, 2:]
-    df = df[lst3]
+def danjuChuli(df):
+    df = df.dropna(how='all', axis=0)
+    cols = [i for i in df.columns.to_list() if 'Unnamed' not in i]
+    df = df[cols]
+    # get maxrows
+    for label, ser in df.items():
+        for num, x in enumerate(ser):
+            if isinstance(x, str):
+                if '合计' in x:
+                    index = num
+                    print(index)
+                    break
+    df = df.iloc[:index]
+    df = df.dropna(how='all', axis=1)
     return df
 
 
@@ -253,10 +249,11 @@ if choice:
     df2_df1 = pd.merge(df2, df1, how='left', on=['class02', 'class05', 'code', 'stock'], sort=False)
     msg = '请点选工厂昨天的销售订单'
     fname_dingdan = easygui.fileopenbox(msg, title='工厂昨天的销售订单工作表')
-    df_dingdan = pd.read_excel(fname_dingdan)
-    df_dingdan = df_dingdan[df_dingdan['单据执行状态'] != '合计']
-    
-    df_dingdan = df_dingdan[['存货编码', '存货名称', '存货分类', '数量(本）', '数量2（件）']]
+    df_dingdan = pd.read_excel(fname_dingdan,skiprows = 7)
+    df_dingdan = danjuChuli(df_dingdan)
+    # df_dingdan = df_dingdan[df_dingdan['单据执行状态'] != '合计']
+
+    df_dingdan = df_dingdan[['存货编码', '存货', '存货分类', '数量(本）', '数量2（件）']]
     df_dingdan.columns = ['code', 'stock', 'class05', 'yesterday_chuku_ben', 'yesterday_chuku_jian']
     # 汇总销售订单
     gp_dingdan = df_dingdan.groupby(['class05', 'code', 'stock'])
@@ -284,6 +281,8 @@ else:
 merge = merge[lst_merge]
 gp = merge.groupby('class02', sort=False)
 data_heji = []
+
+
 def xiaojiClass05(gp2, key, d):
     d = d[lst_result0]
     d.loc[key] = d.sum()
@@ -315,6 +314,8 @@ for name, gp002 in gp:
 df_heji = pd.DataFrame(data_heji)
 df_heji.columns = lst_result
 df_heji.loc['合计'] = df_heji.sum(0)
+
+
 def res_path(relative_path):
     """获取资源绝对路径"""
     try:
@@ -322,6 +323,8 @@ def res_path(relative_path):
     except Exception:
         base_path = os.path.abspath(".")
     return os.path.join(base_path, relative_path)
+
+
 def printseting(fname1, riqi):
     # 设置字体、边框、对齐等常量
     font = Font(name='宋体', size=10)
@@ -430,8 +433,6 @@ def printseting(fname1, riqi):
     wb.save(fname1)
 
 
-
-
 # 零结存
 merge1 = merge[lst_merge]
 merge1 = merge1.fillna(0)
@@ -463,6 +464,7 @@ formatPainter.stylesFormat(ws, area0, cell_start1)
 wb0.close()
 wb.save(fname_canchengpin)
 os.startfile(fname_canchengpin)
+
 
 
 
