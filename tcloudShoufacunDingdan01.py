@@ -197,20 +197,27 @@ def chuli(fname, store_num):
     df = df[lst3]
     return df
 
-def danjuChuli(df):
+def danjuChuli(df,store_num):
     df = df.dropna(how='all', axis=0)
     cols = [i for i in df.columns.to_list() if 'Unnamed' not in i]
     df = df[cols]
     # get maxrows
     for label, ser in df.items():
-        for num, x in enumerate(ser):
+        for num0, x in enumerate(ser):
             if isinstance(x, str):
                 if '合计' in x:
-                    index = num
-                    print(index)
+                    index = num0
+                    # print(index)
                     break
     df = df.iloc[:index]
     df = df.dropna(how='all', axis=1)
+    if store_num == '001库':
+        df = df.loc[df['仓库编码'] == '001']
+    elif df['仓库编码'] == '002电商库':
+        df = df.loc[df['仓库编码'] == '002']
+    else:
+        df = df.loc[(df['仓库编码'] == '001') | (df['仓库编码'] == '002')]
+
     return df
 
 
@@ -250,19 +257,19 @@ if choice:
     msg = '请点选工厂昨天的销售订单'
     fname_dingdan = easygui.fileopenbox(msg, title='工厂昨天的销售订单工作表')
     df_dingdan = pd.read_excel(fname_dingdan,skiprows = 7)
-    df_dingdan = danjuChuli(df_dingdan)
+    df_dingdan = danjuChuli(df_dingdan,num)
     # df_dingdan = df_dingdan[df_dingdan['单据执行状态'] != '合计']
 
-    df_dingdan = df_dingdan[['存货编码', '存货', '存货分类', '数量(本）', '数量2（件）']]
-    df_dingdan.columns = ['code', 'stock', 'class05', 'yesterday_chuku_ben', 'yesterday_chuku_jian']
+    df_dingdan = df_dingdan[['存货编码', '存货', '数量', '数量2']]
+    df_dingdan.columns = ['code', 'stock','yesterday_chuku_ben', 'yesterday_chuku_jian']
     # 汇总销售订单
-    gp_dingdan = df_dingdan.groupby(['class05', 'code', 'stock'])
+    gp_dingdan = df_dingdan.groupby(['code', 'stock'])
     yesterday_chuku_ben = gp_dingdan['yesterday_chuku_ben'].sum()
     yesterday_chuku_jian = gp_dingdan['yesterday_chuku_jian'].sum()
     df_dingdan_total = pd.DataFrame(
         {'yesterday_chuku_ben': yesterday_chuku_ben, 'yesterday_chuku_jian': yesterday_chuku_jian}).reset_index()
     # 再连接销售订单
-    merge = pd.merge(df2_df1, df_dingdan_total, how='outer', on=['class05', 'code', 'stock'], \
+    merge = pd.merge(df2_df1, df_dingdan_total, how='outer', on=['code', 'stock'], \
                      sort=False)
     merge.class02 = merge.class02.fillna(method='ffill')
     merge = merge.fillna(0)
