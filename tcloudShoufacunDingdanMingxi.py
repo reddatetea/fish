@@ -274,7 +274,11 @@ if choice:
                      sort=False)
     merge.class02 = merge.class02.fillna(method='ffill')
     merge = merge.fillna(0)
-    merge.content = (merge.begin_ben + merge.ruku_ben) / (merge.begin_jian + merge.ruku_jian)
+    # merge.content = (merge.begin_ben + merge.ruku_ben) / (merge.begin_jian + merge.ruku_jian)
+    merge['content'] = np.where((merge.begin_ben + merge.ruku_ben) != 0,
+                                (merge.begin_ben + merge.ruku_ben) / (merge.begin_jian + merge.ruku_jian),
+                                np.where(merge.begin_ben > 0, merge.begin_ben / merge.begin_jian,
+                                         merge.ruku_ben / merge.ruku_jian))
     merge.chuku_jian = merge.chuku_jian + merge.yesterday_chuku_jian
     merge.end_jian = merge.end_jian - merge.yesterday_chuku_jian
 
