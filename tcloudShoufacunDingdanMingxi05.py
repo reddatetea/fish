@@ -399,14 +399,14 @@ def danjuChuli(df,store_num):
     cols = [i for i in df.columns.to_list() if 'Unnamed' not in i]
     df = df[cols]
     # get maxrows
-    for label, ser in df.items():
+    for label, ser in df_dingdan.items():
         for num0, x in enumerate(ser):
             if isinstance(x, str):
                 if '合计' in x:
-                    index = num0
-                    # print(index)
+                    heji_row = num0
+                    print(heji_row)
                     break
-    df = df.iloc[:index]
+    df = df.iloc[:heji_row]
     df = df.dropna(how='all', axis=1)
     return df
 
